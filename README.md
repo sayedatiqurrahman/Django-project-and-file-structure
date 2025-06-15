@@ -4,9 +4,9 @@ This guide provides a quick overview of creating a basic Django poll application
 
 ## Prerequisites
 
+*   Basic knowledge of Python, HTML, CSS, and JavaScript
 *   Python 3.10 or later
 *   uv (Install with `pip install uv`)
-*   Django (Install with `uv pip install Django` after activating the virtual environment)
 
 ## Creating a Virtual Environment with uv
 
@@ -112,6 +112,41 @@ This guide provides a quick overview of creating a basic Django poll application
     Go to `http://localhost:8000/polls/` in your browser, and you should see the text “Hello, world. You’re at the polls index.”, which you defined in the index view.
 
 ## Django Project and File Structure
+
+## Day 2: Creating Views and URLs
+
+This section will guide you through creating views and connecting them to URLs.
+
+*   **views.py:** This file contains the view functions that handle requests and return responses. The name `views.py` is a convention; if you name it differently, Django won't automatically recognize it as the views module.
+
+*   **Creating a view:** A view is a Python function that receives a request and returns a response. For example:
+
+    ```python
+    from django.http import HttpResponse
+
+    def my_view(request):
+        return HttpResponse("Hello, world!")
+    ```
+
+*   **Connecting a view to a URL:** To access a view in a browser, you need to map it to a URL in `urls.py`. For example:
+
+    ```python
+    from django.urls import path
+
+    from . import views
+
+    urlpatterns = [
+        path("my-url/", views.my_view, name="my_view"),
+    ]
+    ```
+
+    The `path()` function takes three arguments:
+
+    *   `route`: The URL pattern to match.
+    *   `view`: The view function to call.
+    *   `name`: A unique name for the URL, which can be used to refer to it in templates and other parts of the code.
+
+    The `name` property is important because it allows you to change the URL without breaking any links to it. If you don't use the `name` property, you'll have to manually update all the links whenever you change the URL.
 
 ### Project Structure (mysite)
 

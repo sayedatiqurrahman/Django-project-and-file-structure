@@ -1,0 +1,10 @@
+* {
+    margin: 0;
+    padding: 2;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #280049;
+    color: azure;
+}
