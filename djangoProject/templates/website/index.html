@@ -1,14 +1,14 @@
-{% load static %}
+{% extends "layout.html" %} {% block title %}Home Page{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
-  </head>
-  <body>
-    <h1>This is Django Home Page HTML template engine page</h1>
-  </body>
-</html>
+<div>
+  {% block content %}
+  <h1 class="bg-indigo-400 text-6xl text-blue-800 font-stretch-110%">
+    This is Home page of Django Tutorials
+  </h1>
+  <nav class="bg-cyan-400 text-amber-950">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi amet fuga
+    commodi at quod quaerat, est consequatur dignissimos sint. Magnam nulla illo
+    illum provident qui alias quas delectus dolores placeat?
+  </nav>
+  {% endblock %}
+</div>
