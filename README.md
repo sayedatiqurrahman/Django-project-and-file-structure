@@ -379,19 +379,16 @@ Visit:
 
 
 
-To enhance your Day 4 guide with **automatic Node.js checks** and proper **npm path integration**, here's an updated version that includes:
+<a id="day-04"></a>
+## 📅 Day 4: Integrating Tailwind CSS with Django (Enhanced with Node/NPM Support)
+
+Tailwind CSS is a utility-first CSS framework for rapidly building custom user interfaces. Here’s how to integrate it into your Django project **with support for npm and automatic setup**.
+
 
 * A check for Node.js before installing Tailwind dependencies.
 * Automatic setting of the `TAILWIND_CSS_BIN` path in `settings.py` if necessary.
 * A fallback for users who do not have Node.js installed.
 * Clear instructions for `uv` virtual environments.
-
----
-
-<a id="day-04"></a>
-## 📅 Day 4: Integrating Tailwind CSS with Django (Enhanced with Node/NPM Support)
-
-Tailwind CSS is a utility-first CSS framework for rapidly building custom user interfaces. Here’s how to integrate it into your Django project **with support for npm and automatic setup**.
 
 ---
 
