@@ -1,15 +1,15 @@
 # Django Tutorial: A Concise Guide
 
-[Day 1](#day-01-introduction) |
-[Day 2](#day-2-creating-views-and-urls) |
-[Day 3](#day-3-create-mini-app-and-use-jinja-templates-in-django) |
-[Day 4](#day-4-integrating-tailwind-css-with-django-enhanced-with-nodenpm-support) |
-[Day 5](#day-5-handling-models-and-urls-in-django-with-best-practices)
-
+[Day 1](#day-01) | 
+[Day 2](#day-02) | 
+[Day 3](#day-03) | 
+[Day 4](#day-04) | 
+[Day 5](#day-05)
 
 
 This guide provides a quick overview of Django, including project structure, folder explanations, and how to work with mini-apps and templates.
 
+<a id="day-01"></a>
 ## 📅 Day 01: Introduction
 
 ## Prerequisites
@@ -132,6 +132,7 @@ This guide provides a quick overview of Django, including project structure, fol
 
 
 
+<a id="day-02"></a>
 ## 📅 Day 2: Creating Views and URLs
 ### Django Project and File Structure
 
@@ -204,6 +205,7 @@ How Django Work Behind the scene
 
 </br></br></br>
 
+<a id="day-03"></a>
 ## 📅 **Day 3: Create Mini-App and Use Jinja Templates in Django**
 
 In Django, a **mini-app** (often just called an "app") is a modular piece of your project that handles a specific feature or domain (like polls, blog, users, etc). Django encourages breaking your project into multiple apps for better **separation of concerns**, **reusability**, and **scalability**.
@@ -386,6 +388,7 @@ To enhance your Day 4 guide with **automatic Node.js checks** and proper **npm p
 
 ---
 
+<a id="day-04"></a>
 ## 📅 Day 4: Integrating Tailwind CSS with Django (Enhanced with Node/NPM Support)
 
 Tailwind CSS is a utility-first CSS framework for rapidly building custom user interfaces. Here’s how to integrate it into your Django project **with support for npm and automatic setup**.
@@ -793,6 +796,7 @@ It will prompt you to enter a new password securely.
 ---
 </br></br></br>
 
+<a id="day-05"></a>
 ## 📅 Day 5: Handling Models and URLs in Django (With Best Practices)
 
 In real-world projects, organizing your Django code **properly from the beginning** is crucial. Here's how to do that professionally.
