@@ -1,7 +1,10 @@
 # Django Tutorial: A Concise Guide
 
-[Day 1](#📅-day-01-introduction) | [Day 2](#📅-day-2-creating-views-and-urls) | [Day 3](#📅-day-3-create-mini-app-and-use-jinja-templates-in-django) | 
-[Day 4](#📅-day-4-integrating-tailwind-css-with-django-enhanced-with-nodenpm-support)
+[Day 1](#day-01-introduction) | 
+[Day 2](#day-2-creating-views-and-urls) | 
+[Day 3](#day-3-create-mini-app-and-use-jinja-templates-in-django) | 
+[Day 4](#day-4-integrating-tailwind-css-with-django-enhanced-with-nodenpm-support)  |
+[Day 5](#day-5-handling-models-and-urls-in-django-with-best-practices)
 
 
 This guide provides a quick overview of Django, including project structure, folder explanations, and how to work with mini-apps and templates.
@@ -789,7 +792,7 @@ It will prompt you to enter a new password securely.
 ---
 </br></br></br>
 
-## ✅ Day 5 – Handling Models and URLs in Django (With Best Practices)
+## 📅 Day 5: Handling Models and URLs in Django (With Best Practices)
 
 In real-world projects, organizing your Django code **properly from the beginning** is crucial. Here's how to do that professionally.
 
