@@ -1,0 +1,39 @@
+{% extends "layout.html" %} {% block title %}Mini Application Details
+{%endblock%} {% block content %}
+
+<div class="max-w-4xl mx-auto bg-white p-5 rounded-lg shadow-md text-black">
+  <h1 class="font-black text-4xl">Mini Application Details</h1>
+  <div class="mt-10 max-w-80 p-5 border border-gray-200 rounded-lg shadow-md">
+    <img
+      src="{{ app.image.url }}"
+      alt="{{ app.name }}"
+      class="rounded-2xl h-36"
+    /><br />
+    App Name: <strong>{{ app.name }}</strong><br />
+    App Type: <strong>{{ app.get_app_type_display }}</strong><br />
+    Date Added: <strong>{{ app.date_added|date:"Y-m-d" }}</strong><br />
+    Description: <strong>{{ app.description }}</strong><br />
+    price: <strong>{{ app.price }}</strong><br />
+
+    <br />
+    <a href="{% url 'miniapp:mini-app' %}">
+      <button
+        class="bg-blue-950 text-white py-1 px-3 rounded-lg cursor-pointer"
+      >
+        Back to All Mini Apps
+      </button>
+    </a>
+
+    {% comment %}
+    <a href="{% url 'miniapp:edit_mini_app' app.id %}">
+      <button
+        class="bg-green-500 text-white py-1 px-3 rounded-lg cursor-pointer"
+      >
+        Edit Mini App
+      </button>
+    </a>
+    {% endcomment %}
+  </div>
+</div>
+
+{% endblock %}

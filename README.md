@@ -1,10 +1,10 @@
-# Django Tutorial: A Concise Guide
+# Django Project
 
-[Day 1](#day-01) | 
-[Day 2](#day-02) | 
-[Day 3](#day-03) | 
-[Day 4](#day-04) | 
-[Day 5](#day-05)
+This project is a Django-based web application.
+
+You can follow this documentation to get started: https://docs.chaicode.com/youtube/chai-aur-django/getting-started/
+
+Alternatively, you can follow the instructions in this README.md file.
 
 
 This guide provides a quick overview of Django, including project structure, folder explanations, and how to work with mini-apps and templates.
@@ -16,7 +16,7 @@ This guide provides a quick overview of Django, including project structure, fol
 
 *   Basic knowledge of Python, HTML, CSS, and JavaScript
 *   Python 3.10 or later
-*   uv (Install with `pip install uv`)
+*   uv (Install with `uv install uv`)
 
 ## Creating a Virtual Environment with uv
 
@@ -336,7 +336,7 @@ my_mini_app/templates/my_mini_app/about.html
 </html>
 ```
 
-Django by default supports its own templating language, which is very similar to Jinja (e.g., `{% %}` and `{{ }}` syntax). You can also use pure Jinja2 if you explicitly configure it, but in most Django projects, the default engine is sufficient and similar.
+Django by default supports its own templating language, which is very similar to Jinja (e.g., `{% %}` syntax). You can also use pure Jinja2 if you explicitly configure it, but in most Django projects, the default engine is sufficient and similar.
 
 ---
 
@@ -793,112 +793,409 @@ It will prompt you to enter a new password securely.
 ---
 </br></br></br>
 
-<a id="day-05"></a>
-## 📅 Day 5: Handling Models and URLs in Django (With Best Practices)
 
-In real-world projects, organizing your Django code **properly from the beginning** is crucial. Here's how to do that professionally.
 
----
+<a id="media-setup"></a>
 
-### 📦 1. ❌ Don’t Put Models in the Project's Main App
+## Day 5: 📅 Media Setup: Handling Image Uploads in Django
 
-✅ **Best Practice:**
-Create separate Django **apps for each logical domain** (e.g., `blog`, `accounts`, `products`).
-
-Instead of putting models in `project/models.py` (which doesn’t even exist by default), organize like this:
-
-```
-myproject/
-│
-├── blog/
-│   ├── models.py  ← BlogPost, Category, etc.
-│   └── views.py
-│
-├── accounts/
-│   ├── models.py  ← UserProfile, OTPVerification, etc.
-│   └── views.py
-```
-
-This makes your code modular and easier to scale.
+This guide helps you configure your Django project to upload and serve media files (e.g., images) during **development**.
 
 ---
 
-### 🌐 2. Modular URL Structure
+### ⚠️ Best Practice Reminder
 
-✅ **Each app should have its own `urls.py`**, and you should `include()` it in your main project’s `urls.py`.
+> 🛑 **Never create models inside your main project folder.**
+> ✅ Always create models inside a Django **app** (like `miniapp/models.py`).
+>
+> 🧱 This keeps your codebase modular, reusable, and maintainable — a widely followed **industry standard**.
 
-**Main Project (`myproject/urls.py`):**
+---
+
+### ✅ Step 1: Install Pillow
+
+Django uses the Pillow library to handle image files.
+
+```bash
+uv pip install Pillow
+```
+
+---
+
+### ✅ Step 2: Create Model in App (`miniapp/models.py`)
+
+```python
+from django.db import models
+from django.utils import timezone
+
+class AppVariety(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="mini_apps/")
+    app_type = models.CharField(
+        max_length=2,
+        choices=[
+            ("FR", "Fresh App"),
+            ("SO", "Somosa App"),
+            ("JR", "Junior App"),
+            ("SR", "Senior App"),
+        ("GR", "Graduate App"),
+        ],
+    )
+    date_added = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name  # This controls how the model appears in Django admin
+```
+
+---
+
+### ✅ Step 3: Configure `settings.py` for Media
+
+```python
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+```
+
+---
+
+### ✅ Step 4: Serve Media Files in Development
+
+Add this in your main `urls.py` file:
+
+```python
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", views.home, name="home"),
+    path("about/", views.about, name="about"),
+    path("contact/", views.contact, name="contact"),
+    path("miniapp/", include("miniapp.urls")),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+
+---
+
+
+### ✅ Step 5: Migrate the Database
+
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+### 💡 Why This Step Matters
+
+* `makemigrations`: Tells Django to generate migration files based on the changes in your models.
+* `migrate`: Applies those migration files to create or update the actual database tables.
+
+---
+
+### ✅ Best Practice
+
+Always specify the app name when generating migrations for a specific app:
+
+```bash
+python manage.py makemigrations your_app_name
+```
+
+This keeps your migrations organized, avoids confusion, and speeds up the process by only targeting the app that was updated.
+
+---
+
+
+
+
+### ✅ Step 6: Use Admin Panel to Upload
+
+1. Create a superuser if you still not created a super user:
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+2. Register model in `miniapp/admin.py`:
+
+   ```python
+   from django.contrib import admin
+   from .models import AppVariety
+
+   admin.site.register(AppVariety)
+   ```
+
+3. Run:
+
+   ```bash
+   python manage.py runserver
+   ```
+
+4. Upload an image via `http://127.0.0.1:8000/admin/`.
+
+---
+
+### ✅ Step 7: Show Image in Template
+
+In your view:
+
+```python
+def home(request):
+    apps = AppVariety.objects.all()
+    return render(request, "home.html", {"apps": apps})
+```
+
+In your HTML (`home.html`):
+
+```django
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>...</head>
+<body>
+    {% for item in apps %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+    {% endfor %}
+</body>
+</html>
+```
+
+---
+
+### 📌 Final Example
+
+Uploaded to: `media/mini_apps/logo.png`
+Accessible at: `http://127.0.0.1:8000/media/mini_apps/logo.png`
+
+---
+
+
+## 📦 Step 8: Retrieve and Display Model Data (Views, Templates, Admin)
+
+---
+
+### 🧠 1. What You've Already Done: The Model
+
+You've defined the model `AppVariety` in `models.py`:
+
+```python
+class AppVariety(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="mini_apps/")
+    app_type = models.CharField(
+        max_length=2,
+        choices=[
+            ("FR", "Fresh App"),
+            ("SO", "Somosa App"),
+            ("JR", "Junior App"),
+            ("SR", "Senior App"),
+        ("GR", "Graduate App"),
+        ],
+    )
+    date_added = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name  # This controls how the model appears in Django admin
+```
+
+✅ `__str__` is optional but **recommended** — it defines how objects are labeled in the admin and querysets.
+
+---
+
+### 🧩 2. Show Data in Views (`views.py`)
+
+To fetch all entries of `AppVariety` and pass them to a template:
+
+```python
+from django.shortcuts import render
+from .models import AppVariety
+
+def home(request):
+    apps = AppVariety.objects.all()
+    return render(request, 'miniapp/all_mini_app.html', {'apps': apps})
+```
+
+✅ `AppVariety.objects.all()` gets all rows from the database.
+
+---
+
+### 🖼 3. Show Data in HTML (Template)
+
+In your template (e.g., `miniapp/home.html`):
+
+```html
+<h2>Mini App List</h2>
+
+<ul>
+  {% for app in apps %}
+    <li>
+      <strong>{{ app.name }}</strong><br>
+      Type: {{ app.get_app_type_display }}<br>
+      <img src="{{ app.image.url }}" width="120" alt="{{ app.name }}"><br>
+      Date Added: {{ app.date_added|date:"Y-m-d" }}
+    </li>
+  {% empty %}
+    <li>No apps found.</li>
+  {% endfor %}
+</ul>
+```
+
+✅ Use `get_app_type_display` to show human-readable choice text (e.g., "Fresh App" instead of `"FR"`).
+
+✅ Always use `{{ app.image.url }}` to show the image from `ImageField`.
+
+---
+
+### ⚙️ 4. Customize Django Admin
+
+Register the model in `admin.py` and customize the list display:
 
 ```python
 from django.contrib import admin
-from django.urls import path, include
+from .models import AppVariety
+
+@admin.register(AppVariety)
+class AppVarietyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'app_type', 'date_added')
+    list_filter = ('app_type',)
+    search_fields = ('name',)
+```
+
+✅ This will:
+
+* Show selected fields in the admin list view.
+* Add a filter sidebar by app type.
+* Allow search by name.
+
+---
+
+### 🧪 Example Summary
+
+| Task                  | Code / Usage                                   |
+| --------------------- | ---------------------------------------------- |
+| Fetch from DB         | `AppVariety.objects.all()`                     |
+| Render in view        | `render(request, 'template.html', context)`    |
+| Loop in template      | `{% for app in apps %} ... {% endfor %}`       |
+| Human-readable choice | `{{ app.get_app_type_display }}`               |
+| Image rendering       | `{{ app.image.url }}`                          |
+| Admin customization   | `list_display`, `list_filter`, `search_fields` |
+
+---
+
+## 🚀 Navigation and Routing
+
+### 1. URL Configuration
+
+Django uses `urls.py` files to map URL patterns to view functions. Each app can have its own `urls.py`, and the main project's `urls.py` includes these app-specific URL configurations.
+
+#### Example: Project's `urls.py`
+
+```python
+from django.contrib import admin
+from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('blog.urls')),       # Blog routes
-    path('accounts/', include('accounts.urls')),  # Auth routes
+    path('miniapp/', include('miniapp.urls')),
+    path('website/', include('website.urls')),
+    path('contact/', views.contact, name='contact'),  # Direct access to contact view
 ]
 ```
 
----
-
-### 🧱 3. One Responsibility per App
-
-**Think of apps like reusable modules**:
-
-| App Name   | Responsibility                             |
-| ---------- | ------------------------------------------ |
-| `blog`     | Handles posts, categories, comments        |
-| `accounts` | Registration, login, user profiles         |
-| `store`    | Products, orders, inventory                |
-| `core`     | Shared utilities, context processors, etc. |
-
----
-
-### 🔐 4. Don’t Mix Admin Logic with Business Logic
-
-Avoid putting too much logic inside `admin.py`. Only register models or define admin customizations there. Keep real logic in:
-
-* `models.py` (e.g., `save()` overrides)
-* `signals.py` (e.g., post-save operations)
-* `services.py` (for business logic)
-
----
-
-### 🧪 5. Use Class-Based Views in Complex Cases
-
-For real projects, **prefer Class-Based Views** (`ListView`, `DetailView`, `CreateView`, etc.) for reusability and built-in form support.
-
-Example:
+#### Example: App's `urls.py` (miniapp)
 
 ```python
-from django.views.generic import ListView
-from .models import Post
+from django.urls import path
+from . import views
 
-class PostListView(ListView):
-    model = Post
-    template_name = 'blog/home.html'
-    context_object_name = 'posts'
+urlpatterns = [
+    path('', views.all_mini_app, name='all_mini_app'),
+    path('<int:app_id>/', views.app_details, name='app_details'),
+]
 ```
 
----
+### 2. Creating Views
 
-### 📋 Summary: Real-World Django Practices
+Views are Python functions that handle requests and return responses. They often render templates with data from the backend.
 
-| Best Practice                    | Why It Matters                 |
-| -------------------------------- | ------------------------------ |
-| Use separate apps                | Modular, reusable, scalable    |
-| Keep models inside specific apps | Cleaner structure              |
-| Use `include()` for app URLs     | Organized URL routing          |
-| Avoid bloating `admin.py`        | Better separation of concerns  |
-| Prefer class-based views         | Reusability, built-in features |
+#### Example: `views.py`
 
----
+```python
+from django.shortcuts import render, get_object_or_404
+from .models import AppVariety
 
-🛠 Want to go further? Add:
+def all_mini_app(request):
+    apps = AppVariety.objects.all()
+    return render(request, 'miniapp/all_mini_app.html', {'apps': apps})
 
-* `services.py` → For business logic
-* `forms.py` → Custom form handling
-* `signals.py` → Decouple actions like sending emails or logs
+def app_details(request, app_id):
+    app = get_object_or_404(AppVariety, pk=app_id)
+    return render(request, 'miniapp/app_details.html', {'apps': apps})
+```
 
----
+### 3. Displaying Backend Data in Templates
+
+Use Django's template language to display data passed from views.
+
+#### Example: `all_mini_app.html`
+
+```html
+<h2>All Mini Apps</h2>
+<ul>
+    {% for app in apps %}
+    <li>
+        <a href="{% url 'miniapp:app_details' app.id %}">{{ app.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+```
+
+#### Example: `app_details.html`
+
+```html
+<h2>App Details</h2>
+<h3>{{ app.name }}</h3>
+<img src="{{ app.image.url }}" alt="{{ app.name }}">
+<p>Type: {{ app.get_app_type_display }}</p>
+<p>Date Added: {{ app.date_added }}</p>
+<a href="{% url 'miniapp:all_mini_app' %}">Back to App List</a>
+```
+
+### 4. Handling Navigation with Route Path Names
+
+Use the `{% url 'namespace:route_name' arg1 arg2 ... %}` template tag to generate URLs based on the names defined in `urls.py`. The namespace is the name of the app. This makes your URLs more maintainable.
+
+#### Namespaces Explained
+
+*   **Why use namespaces?** Namespaces prevent URL name collisions between different apps. If two apps have a URL pattern named `'index'`, Django needs a way to distinguish between them.
+*   **App Namespaces:** By including `app_name = 'miniapp'` in your app's `urls.py`, you create a namespace for that app's URLs.
+
+#### Example: Linking to App Details
+
+```html
+<a href="{% url 'miniapp:app_details' app.id %}">View Details</a>
+```
+
+In this example, `miniapp` is the namespace and `app_details` is the name of the URL pattern defined in `miniapp/urls.py`, and `app.id` is passed as an argument to the view.
+
+To navigate back to the app list, use:
+
+```html
+<a href="{% url 'miniapp:all_mini_app' %}">Back to App List</a>
+```
+
+#### Accessing Main Project URLs
+
+To access URLs defined in the main project's `urls.py`, use the route name directly without a namespace. For example, to access the contact page:
+
+```html
+<a href="{% url 'contact' %}">Contact Us</a>
+```
+
+*   **Why no namespace here?** URLs defined directly in the project's `urls.py` are considered project-level URLs. These URLs don't belong to a specific app, so they don't require a namespace. Django knows to look for these URLs directly in the project's URL

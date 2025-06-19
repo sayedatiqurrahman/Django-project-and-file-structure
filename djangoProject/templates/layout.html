@@ -8,7 +8,30 @@
     <link rel="stylesheet" href="{% static "style.css" %}" /> {% tailwind_css %}
   </head>
   <body>
-    <nav>This is our nav</nav>
+    <nav class="bg-blue-100 rounded-full my-2 p-4 shadow-md mx-auto max-w-4xl">
+      <ul class="flex gap-3">
+        <a
+          href="{% url 'home' %}"
+          class="text-xl font-bold hover:text-blue-200 rounded-full shadow bg-blue-800 px-4 py-2"
+          >Home</a
+        >
+        <a
+          href="{% url 'about' %}"
+          class="text-xl font-bold hover:text-blue-200 rounded-full shadow bg-blue-800 px-4 py-2"
+          >About</a
+        >
+        <a
+          href="{% url 'contact' %}"
+          class="text-xl font-bold hover:text-blue-200 rounded-full shadow bg-blue-800 px-4 py-2"
+          >Contact</a
+        >
+        <a
+          href="{% url 'miniapp:mini-app' %}"
+          class="text-xl font-bold hover:text-blue-200 rounded-full shadow bg-blue-800 px-4 py-2"
+          >Mini Apps</a
+        >
+      </ul>
+    </nav>
     {% block content %}{% endblock %}
   </body>
 </html>

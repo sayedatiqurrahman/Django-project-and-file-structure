@@ -2,6 +2,33 @@
 
 <div>
   {% block content %}
-  <h1 class="font-black text-9xl">This is Home page of Mini App</h1>
+  <h1 class="font-black text-9xl">This is List of Mini App</h1>
+
+  <div class="mt-20 grid grid-cols-4 gap-5">
+    {% for app in apps %}
+    <div
+      class="m-5 flex text-black items-center gap-3 p-4 border-b border-gray-200 rounded-lg bg-white shadow-md hover:bg-gray-50"
+    >
+      <img
+        src="{{ app.image.url }}"
+        class="rounded-2xl h-36"
+        alt="{{ app.name }}"
+      /><br />
+      <div>
+        <strong>{{ app.name }}</strong><br />
+        Type: {{ app.get_app_type_display }}<br />
+        Date Added: {{ app.date_added|date:"Y-m-d" }}
+        <a href="./{{app.id}}">
+          <button
+            class="ml-auto block w-full bg-blue-950 text-white py-1 px-3 rounded-lg cursor-pointer"
+          >
+            {{app.app_type}} - {{app.id}}
+          </button>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
   {% endblock %}
 </div>
