@@ -1,0 +1,28 @@
+{% extends "layout.html" %} 
+{% block title %}App Stores{% endblock %} 
+<></>
+{% block content %}
+
+<h2>This is the App Stores page</h2>
+<p>Here you can find various app stores.</p>
+</br>
+
+<form method="POST" class="text-black  bg-blue-200 p-4 rounded-lg">
+{% csrf_token %}
+        {{form.as_p}}
+
+
+    <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg">
+        Submit
+    </button>
+  
+</form>
+<ul>
+{% if  stores %}
+    {% for store in stores  %}
+    <li> <a href="#">{{store.name}}</a></li
+    {% endfor %}
+{% endif %}
+</ul>
+
+{% endblock %}
